@@ -1,6 +1,30 @@
 const mongoose = require('mongoose');
 const shortid = require('shortid');
 
+const ParticipantSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['waiting', 'processing', 'completed'],
+    default: 'waiting'
+  },
+  number: {
+    type: Number,
+    required: true
+  },
+  joinedAt: {
+    type: Date,
+    default: Date.now
+  },
+  estimatedStartTime: {
+    type: Date
+  }
+});
+
 const QueueSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -31,7 +55,8 @@ const QueueSchema = new mongoose.Schema({
   currentNumber: {
     type: Number,
     default: 0
-  }
+  },
+  participants: [ParticipantSchema]
 }, {
   timestamps: true
 });

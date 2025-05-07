@@ -24,10 +24,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     try {
       console.log('Submitting:', { email: formData.email, password: formData.password });
-      
+
       if (!formData.email || !formData.password) {
         setError('Email and password are required');
         return;
@@ -35,9 +35,14 @@ const Login = () => {
 
       const response = await login(formData.email, formData.password);
       console.log('Login response:', response);
-      
+
       if (response.user) {
-        navigate(response.user.role === 'admin' ? '/admin-dashboard' : '/dashboard');
+        // Redirect based on user role
+        if (response.user.role === 'admin') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/dashboard'); // Regular users go to user dashboard
+        }
       } else {
         setError('Login failed - invalid response');
       }
